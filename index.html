@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clutch Pulse - B.LEAGUE公式ファンナビ</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- グラフ描画用ライブラリ Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <div class="app-card">
+    
+    <!-- 🔔 通知ポップアップ -->
+    <div id="toastNotification" class="toast-notification">
+      <div class="toast-header">
+        <span>🔔 試合速報</span>
+        <span class="toast-close" onclick="closeToast()">✕</span>
+      </div>
+      <div id="toastContent"><strong>🏀 データ読込完了</strong></div>
+    </div>
+
+    <!-- ヘッダー -->
+    <div class="app-header">
+      <div class="app-logo">⚡ Clutch Pulse</div>
+      <span class="official-badge">B.LEAGUE ファンナビ</span>
+    </div>
+
+    <!-- スコアボード（チーム名・得点自動取得） -->
+    <div class="score-board">
+      <div class="team">
+        <div class="team-name" id="homeTeam">HOME</div>
+      </div>
+      <div style="text-align:center;">
+        <div class="period-badge" id="currentPeriod">1Q</div>
+        <div class="score win" id="matchScore">0 - 0</div>
+      </div>
+      <div class="team">
+        <div class="team-name" id="awayTeam">AWAY</div>
+      </div>
+    </div>
+
+    <!-- 🔥 最新プレー表示 -->
+    <div class="latest-play-box">
+      <div class="latest-play-title">
+        <span>🔥 最新プレー</span>
+        <span id="latestTime" class="latest-time">残り --:--</span>
+      </div>
+      <div class="latest-play-text" id="latestPlayText">データ読み込み中...</div>
+      <div class="latest-play-sub" id="latestPlayer"></div>
+    </div>
+
+    <!-- 🎯 シュート位置を表示するコート -->
+    <div class="section-title">
+      <span>🎯 シュート位置</span>
+      <span id="shotAreaInfo" class="area-badge">エリア: --</span>
+    </div>
+    <div class="basketball-court" id="courtContainer">
+      <div class="court-line court-3p"></div>
+      <div class="court-line court-key"></div>
+      <div class="court-line court-hoop"></div>
+      <!-- マーカーがここに動的生成されます -->
+      <div id="shotMarker" class="shot-marker hidden"></div>
+    </div>
+
+    <!-- 📈 得点推移グラフ -->
+    <div class="section-title">
+      <span>📈 得点推移グラフ</span>
+    </div>
+    <div class="chart-container">
+      <canvas id="scoreChart"></canvas>
+    </div>
+
+    <!-- ▶ 試合時系列再生コントローラー -->
+    <div class="playback-controls">
+      <button id="btnPlay" class="btn-play">▶ 試合を再生</button>
+      <button id="btnReset" class="btn-reset">↺ リセット</button>
+      <div class="speed-selector">
+        <label>速度:</label>
+        <select id="playSpeed">
+          <option value="1000">1x</option>
+          <option value="500" selected>2x</option>
+          <option value="200">5x</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 📜 全イベント履歴（折りたたみ） -->
+    <button class="btn-toggle-history" id="toggleBtn" onclick="toggleHistory()">
+      📜 全イベント・時系列を見る ▼
+    </button>
+    <div id="historyContainer" class="history-container">
+      <div id="historyList"></div>
+    </div>
+
+    <!-- 🔗 公式リンク・共有 -->
+    <div class="official-action-box">
+      <a href="https://basketball.mb.softbank.jp/" target="_blank" class="btn-hero-official">
+        <div>🎥 公式ハイライト・全編視聴はこちら ▶</div>
+      </a>
+    </div>
+
+  </div>
+
+  <!-- JavaScriptモジュールの読み込み（順番が重要です） -->
+  <script src="csv.js"></script>
+  <script src="ui.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+/* 全体基本設定 */
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: #0f172a;
+  color: #334155;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  margin: 0;
+}
+
+.app-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 390px;
+  border-radius: 28px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  padding: 18px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* 通知トースト */
+.toast-notification {
+  display: none;
+  background: #1e293b;
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  border-left: 4px solid #ef4444;
+  margin-bottom: 12px;
+}
+.toast-notification.show { display: block; animation: slideDown 0.4s ease; }
+.toast-header { display: flex; justify-content: space-between; font-weight: bold; color: #f87171; }
+.toast-close { cursor: pointer; color: #94a3b8; }
+
+/* ヘッダー */
+.app-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.app-logo { font-size: 1.1rem; font-weight: 900; background: linear-gradient(135deg, #ef4444, #f97316); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.official-badge { background: #000; color: #fff; font-size: 0.65rem; font-weight: bold; padding: 3px 8px; border-radius: 6px; }
+
+/* スコアボード */
+.score-board {
+  display: flex; justify-content: space-between; align-items: center;
+  background: #f8fafc; padding: 12px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 12px;
+}
+.team-name { font-weight: bold; font-size: 0.95rem; color: #1e293b; }
+.score { font-size: 1.8rem; font-weight: 800; color: #ef4444; }
+.period-badge { font-size: 0.65rem; background: #334155; color: #fff; padding: 2px 6px; border-radius: 4px; display: inline-block; }
+
+/* 最新プレー */
+.latest-play-box {
+  background: #fff1f2; border: 1px solid #fecaca; border-left: 4px solid #ef4444;
+  border-radius: 12px; padding: 12px; margin-bottom: 12px;
+}
+.latest-play-title { font-size: 0.75rem; font-weight: bold; color: #dc2626; display: flex; justify-content: space-between; }
+.latest-play-text { font-size: 0.9rem; font-weight: bold; color: #881337; margin-top: 4px; }
+.latest-play-sub { font-size: 0.75rem; color: #9f1239; margin-top: 2px; }
+
+/* バスケットコート（ハーフコート表示） */
+.section-title { font-size: 0.85rem; font-weight: bold; color: #1e293b; margin: 12px 0 6px 0; display: flex; justify-content: space-between; align-items: center; }
+.area-badge { font-size: 0.7rem; color: #64748b; font-weight: normal; }
+
+.basketball-court {
+  background: #e29555; border: 2px solid #fff; height: 180px;
+  border-radius: 12px; position: relative; overflow: hidden; margin-bottom: 12px;
+}
+.court-line { position: absolute; border: 2px solid #ffffff; }
+.court-key { bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 70px; background: rgba(255,255,255,0.15); }
+.court-3p { bottom: 0; left: 50%; transform: translateX(-50%); width: 260px; height: 130px; border-radius: 130px 130px 0 0; }
+.court-hoop { bottom: 15px; left: 50%; transform: translateX(-50%); width: 14px; height: 14px; border-radius: 50%; border-color: #ef4444; }
+
+/* 🎯 シュートマーカー */
+.shot-marker {
+  position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  border: 2px solid #fff; box-shadow: 0 0 8px rgba(0,0,0,0.4);
+  transform: translate(-50%, -50%); transition: all 0.3s ease; z-index: 10;
+}
+.shot-marker.hidden { display: none; }
+.shot-marker.paint { background-color: #ef4444; }  /* ペイントエリア: 赤 */
+.shot-marker.mid { background-color: #f59e0b; }    /* ミドル: オレンジ */
+.shot-marker.three { background-color: #3b82f6; }  /* 3P: 青 */
+
+/* 📈 グラフ */
+.chart-container { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px; margin-bottom: 12px; height: 150px; }
+
+/* コントローラー */
+.playback-controls { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+.btn-play { flex: 2; background: #ef4444; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+.btn-reset { flex: 1; background: #64748b; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+.speed-selector { font-size: 0.75rem; color: #475569; font-weight: bold; }
+
+/* 履歴エリア */
+.btn-toggle-history { width: 100%; background: #334155; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
+.history-container { display: none; max-height: 250px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 10px; padding: 6px; background: #fafafa; margin-top: 6px; }
+.history-container.open { display: block; }
+.history-item { background: #fff; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 8px; margin-bottom: 4px; font-size: 0.75rem; }
+.history-item.active { border-left: 4px solid #ef4444; background: #fff1f2; }
+
+/* 公式アクション */
+.official-action-box { margin-top: 12px; }
+.btn-hero-official { display: block; background: #0f172a; color: #fff; text-align: center; text-decoration: none; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 0.85rem; }
+
+@keyframes slideDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
