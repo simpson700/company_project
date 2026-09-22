@@ -34,8 +34,8 @@ const CSVManager = {
       });
 
       // 座標数値をキャスト
-      obj.x = parseFloat(obj["x座標"]) || null;
-      obj.y = parseFloat(obj["y座標"]) || null;
+      obj.x = parseFloat(obj["X座標"]) || null;
+      obj.y = parseFloat(obj["Y座標"]) || null;
       
       return obj;
     });

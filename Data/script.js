@@ -10,7 +10,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   UIManager.initChart();
 
   // CSVファイルの読み込み
-  const events = await CSVManager.loadCSV('#');
+  const events = await CSVManager.loadCSV('events.csv');
 
   if (events.length > 0) {
     // 自動でホーム・アウェイチーム名を取得して設定
