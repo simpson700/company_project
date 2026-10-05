@@ -73,15 +73,98 @@
       </div>
 
       <!-- 🎯 コート表示 -->
-      <div class="section-title">
-        <span>🎯 決定打シュート位置</span>
-      </div>
-      <div class="basketball-court">
-        <div class="court-3p"></div>
-        <div class="court-key"></div>
-        <div class="shot-marker"></div>
-        <div class="shot-label">勝負を決めた3P</div>
-      </div>
+      <section class="shot-distribution-section">
+
+        <div class="shot-distribution-header">
+          <div class="shot-distribution-title">
+            🎯 シュート分布
+          </div>
+
+          <div class="shot-distribution-subtitle">
+            SHOT MAP
+          </div>
+        </div>
+
+        <div class="basketball-court">
+
+          <div class="court-center-line"></div>
+
+          <div class="court-3p"></div>
+
+          <div class="court-key"></div>
+
+          <div class="court-hoop"></div>
+
+          <!-- CSVからここにシュート位置を追加 -->
+          <div
+            class="shot-marker success"
+            style="left: 30%; top: 35%;"
+            title="3P成功"
+          ></div>
+
+          <div
+            class="shot-marker success"
+            style="left: 70%; top: 42%;"
+            title="2P成功"
+          ></div>
+
+          <div
+            class="shot-marker miss"
+            style="left: 55%; top: 25%;"
+            title="3P失敗"
+          ></div>
+
+        </div>
+
+        <div class="shot-legend">
+
+          <div class="shot-legend-item">
+            <span class="legend-dot legend-success"></span>
+            成功
+          </div>
+
+          <div class="shot-legend-item">
+            <span class="legend-dot legend-miss"></span>
+            失敗
+          </div>
+
+        </div>
+
+        <div class="shot-stats">
+
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">
+              シュート数
+            </div>
+
+            <div class="shot-stat-value">
+              24
+            </div>
+          </div>
+
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">
+              成功数
+            </div>
+
+            <div class="shot-stat-value shot-stat-highlight">
+              11
+            </div>
+          </div>
+
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">
+              成功率
+            </div>
+
+            <div class="shot-stat-value">
+              45.8%
+            </div>
+          </div>
+
+        </div>
+
+      </section>
 
       <!-- 🔗 B.LEAGUE 公式誘導ハブ -->
       <div class="official-action-box">

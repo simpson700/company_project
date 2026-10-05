@@ -1,273 +1,1023 @@
-  /* 全体設定 */
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Helvetica Neue', Arial, sans-serif;
-      background-color: #0f172a;
-      color: #334155;
-      display: flex;
-      justify-content: center;
-      padding: 10px;
-      margin: 0;
-    }
 
-    /* スマホ画面コンテナ */
-    .app-card {
-      background: #ffffff;
-      width: 100%;
-      max-width: 390px;
-      border-radius: 28px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      padding: 18px;
-      box-sizing: border-box;
-      position: relative;
-      overflow: hidden;
-    }
+/* =========================================
+   Clutch Pulse
+   PC + スマホ対応CSS
+========================================= */
 
-    /* ① 🔔 通知ポップアップ */
-    .toast-notification {
-      display: none;
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      color: #fff;
-      padding: 12px 14px;
-      border-radius: 16px;
-      font-size: 0.8rem;
-      border-left: 4px solid #ef4444;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-      margin-bottom: 15px;
-    }
-    .toast-notification.show {
-      display: block;
-      animation: slideDown 0.5s ease-out;
-    }
-    .toast-header {
-      display: flex;
-      justify-content: space-between;
-      color: #f87171;
-      font-weight: bold;
-      font-size: 0.75rem;
-      margin-bottom: 4px;
-    }
-    .toast-close { cursor: pointer; color: #94a3b8; }
+/* =========================
+   全体設定
+========================= */
 
-    /* ヘッダー */
-    .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
-    .app-logo {
-      font-size: 1.1rem;
-      font-weight: 900;
-      font-style: italic;
-      background: linear-gradient(135deg, #ef4444, #f97316);
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .official-badge {
-      background: #000; color: #fff; font-size: 0.65rem; font-weight: bold;
-      padding: 3px 8px; border-radius: 6px; letter-spacing: 0.5px;
-    }
+html {
+  scroll-behavior: smooth;
+}
 
-    /* タブナビゲーション */
-    .tab-container {
-      display: flex; background: #f1f5f9; border-radius: 12px; padding: 3px; margin-bottom: 12px;
-    }
-    .tab-btn {
-      flex: 1; border: none; background: transparent; padding: 8px 0;
-      font-size: 0.8rem; font-weight: bold; color: #64748b; border-radius: 10px;
-      cursor: pointer; transition: all 0.2s;
-    }
-    .tab-btn.active {
-      background: #ffffff; color: #ef4444; box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+* {
+  box-sizing: border-box;
+}
 
-    /* 注目情報 */
-    .match-preview-tag {
-      background: #1e293b; color: #fff; text-align: center;
-      padding: 4px; border-radius: 6px; font-size: 0.7rem; font-weight: bold; margin-bottom: 10px;
-    }
+body {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(239, 68, 68, 0.08), transparent 35%),
+    #0f172a;
+  color: #334155;
+  margin: 0;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
 
-    /* スコアボード */
-    .score-board {
-      display: flex; justify-content: space-between; align-items: center;
-      background: #f8fafc; padding: 14px 12px; border-radius: 16px; border: 1px solid #e2e8f0;
-      margin-bottom: 12px;
-    }
-    .team { text-align: center; flex: 1; }
-    .team-name { font-weight: bold; font-size: 0.9rem; color: #1e293b; word-break: break-all; }
-    .score { font-size: 1.8rem; font-weight: 800; }
-    .win { color: #ef4444; }
+/* =========================
+   メインコンテナ
+========================= */
 
-    /* 🔥 最新プレー表示領域 */
-    .latest-play-box {
-      background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-      border: 1px solid #fecaca;
-      border-left: 4px solid #ef4444;
-      border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-    }
-    .latest-play-title {
-      font-size: 0.75rem;
-      font-weight: bold;
-      color: #dc2626;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .latest-play-text {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: #881337;
-      line-height: 1.3;
-    }
-    .latest-play-sub {
-      font-size: 0.75rem;
-      color: #9f1239;
-      margin-top: 4px;
-    }
+.app-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 24px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.35);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+}
 
-    /* 詳細ボタン & 履歴エリア */
-    .btn-toggle-history {
-      width: 100%;
-      background: #334155;
-      color: #ffffff;
-      border: none;
-      padding: 10px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: background 0.2s;
-      margin-bottom: 12px;
-    }
-    .btn-toggle-history:hover {
-      background: #1e293b;
-    }
+/* =========================
+   通知
+========================= */
 
-    .history-container {
-      display: none; /* 初期状態は非表示 */
-      max-height: 400px;
-      overflow-y: auto;
-      border: 1px solid #e2e8f0;
-      border-radius: 12px;
-      padding: 8px;
-      background: #fafafa;
-      margin-bottom: 16px;
-    }
-    .history-container.open {
-      display: block;
-    }
+.toast-notification {
+  display: none;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: #fff;
+  padding: 14px 18px;
+  border-radius: 14px;
+  font-size: 0.85rem;
+  border-left: 4px solid #ef4444;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  margin-bottom: 20px;
+}
 
-    .game-list-item {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 8px 10px;
-      margin-bottom: 6px;
-      font-size: 0.75rem;
-      line-height: 1.4;
-    }
-    .game-list-item-header {
-      display: flex;
-      justify-content: space-between;
-      font-weight: bold;
-      color: #1e293b;
-      margin-bottom: 2px;
-    }
-    .game-score-badge {
-      background: #ef4444;
-      color: #fff;
-      padding: 1px 6px;
-      border-radius: 4px;
-      font-size: 0.7rem;
-    }
+.toast-notification.show {
+  display: block;
+  animation: slideDown 0.5s ease-out;
+}
 
-    .section-title {
-      font-size: 0.85rem; font-weight: bold; color: #1e293b;
-      margin: 16px 0 8px 0; display: flex; justify-content: space-between; align-items: center;
-    }
+.toast-header {
+  display: flex;
+  justify-content: space-between;
+  color: #f87171;
+  font-weight: bold;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
 
-    /* 🎯 バスケットコート */
-    .basketball-court {
-      background: #e09f67; border: 2px solid #fff; height: 130px;
-      border-radius: 10px; position: relative; overflow: hidden; margin-top: 6px;
-    }
-    .court-key {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 70px; height: 50px; border: 2px solid #fff; background: rgba(255,255,255,0.1);
-    }
-    .court-3p {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 200px; height: 100px; border: 2px solid #fff; border-radius: 100px 100px 0 0;
-    }
-    .shot-marker {
-      position: absolute; top: 30px; right: 70px;
-      width: 12px; height: 12px; background: #ef4444; border: 2px solid #fff;
-      border-radius: 50%; box-shadow: 0 0 10px #ef4444; animation: pulse 1.5s infinite;
-    }
-    .shot-label {
-      position: absolute; top: 12px; right: 25px; background: rgba(0,0,0,0.7);
-      color: #fff; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold;
-    }
+.toast-close {
+  cursor: pointer;
+  color: #94a3b8;
+}
 
-    /* 🔗 B.LEAGUE 公式誘導アクションハブ */
-    .official-action-box {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
-      border-radius: 18px; padding: 16px; margin-top: 20px; color: #fff;
-    }
-    .btn-hero-official {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      gap: 4px; background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff;
-      text-decoration: none; padding: 16px 12px; border-radius: 16px; text-align: center;
-      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4); transition: transform 0.2s; margin-bottom: 12px;
-    }
-    .btn-hero-official:active { transform: scale(0.98); }
-    .hero-arrow {
-      margin-top: 4px; background: #ffffff; color: #ef4444; font-weight: 900;
-      font-size: 0.8rem; padding: 4px 14px; border-radius: 20px;
-    }
-    .btn-grid-sub { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .btn-sub {
-      background: #334155; color: #f8fafc; text-decoration: none;
-      font-size: 0.75rem; font-weight: bold; padding: 10px; border-radius: 10px; text-align: center;
-    }
+/* =========================
+   ヘッダー
+========================= */
 
-    /* SNS共有 */
-    .sns-share-container { margin-top: 15px; padding-top: 12px; border-top: 1px solid #f1f5f9; }
-    .bg-share-main {
-      width: 100%; background: #1e293b; color: #fff; font-size: 0.85rem;
-      padding: 10px; margin-bottom: 8px; border: none; cursor: pointer; border-radius: 12px; font-weight: bold;
-      transition: transform 0.2s;
-    }
-    .bg-share-main:active { transform: scale(0.98); }
-    .sns-grid { display: flex; gap: 6px; }
-    .sns-btn {
-      flex: 1; text-align: center; padding: 6px 0; border-radius: 8px;
-      font-size: 0.7rem; font-weight: bold; color: white; text-decoration: none;
-    }
-    .bg-x { background: #000; }
-    .bg-line { background: #06c755; }
-    .bg-insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #bc1888); }
-    .bg-youtube { background-color: #FF0000; }
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
 
-    /* 次の試合 */
-    .next-match-card { margin-top: 20px; padding-top: 16px; border-top: 2px dashed #cbd5e1; }
-    .next-match-title { font-size: 0.8rem; font-weight: bold; color: #475569; margin-bottom: 8px; }
-    .next-match-box {
-      background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 16px; padding: 14px; text-align: center;
-    }
-    .next-teams { font-size: 1.1rem; font-weight: 900; color: #0f172a; margin: 4px 0; }
-    .next-date { font-size: 0.75rem; color: #ef4444; font-weight: bold; margin-bottom: 10px; }
-    .btn-next-official {
-      display: block; background: #0f172a; color: #fff; text-decoration: none;
-      padding: 10px; border-radius: 10px; font-size: 0.8rem; font-weight: bold;
-    }
+.app-logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  font-style: italic;
+  background: linear-gradient(135deg, #ef4444, #f97316);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
-    @keyframes slideDown { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+.official-badge {
+  background: #000;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* =========================
+   タブ
+========================= */
+
+.tab-container {
+  display: flex;
+  background: #f1f5f9;
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 22px;
+  max-width: 500px;
+}
+
+.tab-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #64748b;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: #ffffff;
+  color: #ef4444;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* =========================
+   注目情報
+========================= */
+
+.match-preview-tag {
+  background: #1e293b;
+  color: #fff;
+  text-align: center;
+  padding: 7px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+/* =========================
+   スコアボード
+========================= */
+
+.score-board {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background:
+    linear-gradient(135deg, #f8fafc, #f1f5f9);
+
+  padding: 24px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  margin-bottom: 18px;
+}
+
+.team {
+  text-align: center;
+  flex: 1;
+}
+
+.team-name {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #1e293b;
+  word-break: break-all;
+}
+
+.score {
+  font-size: 2.5rem;
+  font-weight: 900;
+}
+
+.win {
+  color: #ef4444;
+}
+
+/* =========================
+   最新プレー
+========================= */
+
+.latest-play-box {
+  background: linear-gradient(135deg, #fff1f2, #ffe4e6);
+  border: 1px solid #fecaca;
+  border-left: 5px solid #ef4444;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 18px;
+}
+
+.latest-play-title {
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #dc2626;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.latest-play-text {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #881337;
+  line-height: 1.5;
+}
+
+.latest-play-sub {
+  font-size: 0.8rem;
+  color: #9f1239;
+  margin-top: 6px;
+}
+
+/* =========================
+   詳細ボタン
+========================= */
+
+.btn-toggle-history {
+  width: 100%;
+  background: #334155;
+  color: #ffffff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 14px;
+}
+
+.btn-toggle-history:hover {
+  background: #1e293b;
+}
+
+/* =========================
+   履歴
+========================= */
+
+.history-container {
+  display: none;
+  max-height: 450px;
+  overflow-y: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px;
+  background: #fafafa;
+  margin-bottom: 20px;
+}
+
+.history-container.open {
+  display: block;
+}
+
+.game-list-item {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 7px;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.game-list-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 3px;
+}
+
+.game-score-badge {
+  background: #ef4444;
+  color: #fff;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+/* =========================
+   セクションタイトル
+========================= */
+
+.section-title {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1e293b;
+  margin: 24px 0 10px 0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* =========================
+   メインコンテンツ
+   PCでは横並び
+========================= */
+
+#todayTab {
+  width: 100%;
+}
+
+/* コートと情報を横並びにするための準備 */
+/* =========================
+   シュート分布エリア
+========================= */
+
+.shot-distribution-section {
+  margin-top: 30px;
+}
+
+/* タイトル */
+
+.shot-distribution-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.shot-distribution-title {
+  font-size: 1rem;
+  font-weight: 900;
+  color: #1e293b;
+}
+
+.shot-distribution-subtitle {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* =========================
+   コート本体
+========================= */
+
+.basketball-court {
+  position: relative;
+
+  width: 100%;
+  max-width: 800px;
+  height: 420px;
+
+  margin: 0 auto;
+
+  background:
+    linear-gradient(
+      rgba(255,255,255,0.04) 1px,
+      transparent 1px
+    ),
+    #d9955b;
+
+  background-size: 40px 40px;
+
+  border: 4px solid #ffffff;
+  border-radius: 18px;
+
+  overflow: hidden;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.08),
+    0 15px 35px rgba(0,0,0,0.15);
+}
+
+
+/* =========================
+   コート中央線
+========================= */
+
+.court-center-line {
+  position: absolute;
+
+  top: 0;
+  bottom: 0;
+  left: 50%;
+
+  width: 2px;
+
+  background: rgba(255,255,255,0.8);
+
+  transform: translateX(-50%);
+}
+
+
+/* =========================
+   ゴール周辺
+========================= */
+
+.court-key {
+  position: absolute;
+
+  bottom: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 190px;
+  height: 135px;
+
+  border: 3px solid #ffffff;
+
+  background: rgba(255,255,255,0.08);
+}
+
+
+/* =========================
+   3Pライン
+========================= */
+
+.court-3p {
+  position: absolute;
+
+  bottom: 0;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 520px;
+  height: 280px;
+
+  border: 3px solid #ffffff;
+
+  border-bottom: none;
+
+  border-radius: 270px 270px 0 0;
+}
+
+
+/* =========================
+   ゴール
+========================= */
+
+.court-hoop {
+  position: absolute;
+
+  bottom: 12px;
+  left: 50%;
+
+  transform: translateX(-50%);
+
+  width: 30px;
+  height: 30px;
+
+  border: 4px solid #ef4444;
+  border-radius: 50%;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 10px rgba(239,68,68,0.5);
+}
+
+
+/* =========================
+   シュートマーカー共通
+========================= */
+
+.shot-marker {
+  position: absolute;
+
+  width: 18px;
+  height: 18px;
+
+  border-radius: 50%;
+
+  transform: translate(-50%, -50%);
+
+  border: 3px solid #ffffff;
+
+  z-index: 5;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+
+/* 成功 */
+
+.shot-marker.success {
+  background: #16a34a;
+
+  box-shadow:
+    0 0 8px rgba(22,163,74,0.6),
+    0 0 18px rgba(22,163,74,0.35);
+}
+
+
+/* 失敗 */
+
+.shot-marker.miss {
+  background: #64748b;
+
+  opacity: 0.65;
+}
+
+
+/* ホバー */
+
+.shot-marker:hover {
+  transform: translate(-50%, -50%) scale(1.5);
+
+  z-index: 10;
+}
+
+
+/* =========================
+   シュート情報
+========================= */
+
+.shot-tooltip {
+  position: absolute;
+
+  background: rgba(15,23,42,0.92);
+
+  color: #ffffff;
+
+  padding: 7px 10px;
+
+  border-radius: 8px;
+
+  font-size: 0.7rem;
+
+  font-weight: bold;
+
+  pointer-events: none;
+
+  z-index: 20;
+
+  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+
+/* =========================
+   凡例
+========================= */
+
+.shot-legend {
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  gap: 18px;
+
+  margin-top: 12px;
+
+  font-size: 0.72rem;
+
+  color: #64748b;
+}
+
+.shot-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+
+  border-radius: 50%;
+}
+
+.legend-success {
+  background: #16a34a;
+}
+
+.legend-miss {
+  background: #64748b;
+}
+
+
+/* =========================
+   シュート分析カード
+========================= */
+
+.shot-stats {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 10px;
+
+  margin-top: 14px;
+}
+
+.shot-stat-card {
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 12px;
+
+  padding: 12px;
+
+  text-align: center;
+}
+
+.shot-stat-label {
+  font-size: 0.68rem;
+
+  color: #64748b;
+
+  margin-bottom: 4px;
+}
+
+.shot-stat-value {
+  font-size: 1.2rem;
+
+  font-weight: 900;
+
+  color: #1e293b;
+}
+
+.shot-stat-highlight {
+  color: #ef4444;
+}
+
+
+/* =========================
+   スマホ
+========================= */
+
+@media (max-width: 600px) {
+
+  .basketball-court {
+    height: 280px;
+  }
+
+  .court-3p {
+    width: 250px;
+    height: 185px;
+  }
+
+  .court-key {
+    width: 105px;
+    height: 85px;
+  }
+
+  .shot-marker {
+    width: 13px;
+    height: 13px;
+    border-width: 2px;
+  }
+
+  .shot-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .shot-stat-card {
+    padding: 9px 5px;
+  }
+
+  .shot-stat-value {
+    font-size: 1rem;
+  }
+
+}
+
+/* =========================
+   B.LEAGUE誘導
+========================= */
+
+.official-action-box {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border-radius: 18px;
+  padding: 20px;
+  margin-top: 30px;
+  color: #fff;
+}
+
+.btn-hero-official {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 5px;
+
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+
+  text-decoration: none;
+
+  padding: 20px 15px;
+  border-radius: 16px;
+
+  text-align: center;
+
+  box-shadow: 0 8px 20px rgba(239,68,68,0.4);
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+
+  margin-bottom: 12px;
+}
+
+.btn-hero-official:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(239,68,68,0.5);
+}
+
+.btn-hero-official:active {
+  transform: scale(0.98);
+}
+
+.hero-arrow {
+  margin-top: 5px;
+  background: #ffffff;
+  color: #ef4444;
+  font-weight: 900;
+  font-size: 0.8rem;
+  padding: 5px 16px;
+  border-radius: 20px;
+}
+
+.btn-grid-sub {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.btn-sub {
+  background: #334155;
+  color: #f8fafc;
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: bold;
+  padding: 11px;
+  border-radius: 10px;
+  text-align: center;
+  transition: background 0.2s;
+}
+
+.btn-sub:hover {
+  background: #475569;
+}
+
+/* =========================
+   SNS
+========================= */
+
+.sns-share-container {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.bg-share-main {
+  width: 100%;
+  background: #1e293b;
+  color: #fff;
+  font-size: 0.9rem;
+  padding: 12px;
+  margin-bottom: 8px;
+  border: none;
+  cursor: pointer;
+  border-radius: 12px;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+.bg-share-main:active {
+  transform: scale(0.98);
+}
+
+.sns-grid {
+  display: flex;
+  gap: 6px;
+}
+
+.sns-btn {
+  flex: 1;
+  text-align: center;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+}
+
+.bg-x {
+  background: #000;
+}
+
+.bg-line {
+  background: #06c755;
+}
+
+.bg-insta {
+  background: linear-gradient(
+    45deg,
+    #f09433,
+    #e6683c,
+    #dc2743,
+    #bc1888
+  );
+}
+
+.bg-youtube {
+  background-color: #ff0000;
+}
+
+/* =========================
+   次の試合
+========================= */
+
+.next-match-card {
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 2px dashed #cbd5e1;
+}
+
+.next-match-title {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: #475569;
+  margin-bottom: 10px;
+}
+
+.next-match-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 18px;
+  text-align: center;
+}
+
+.next-teams {
+  font-size: 1.2rem;
+  font-weight: 900;
+  color: #0f172a;
+  margin: 5px 0;
+}
+
+.next-date {
+  font-size: 0.8rem;
+  color: #ef4444;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.btn-next-official {
+  display: block;
+  background: #0f172a;
+  color: #fff;
+  text-decoration: none;
+  padding: 11px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+/* =========================
+   アニメーション
+========================= */
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.3);
+  }
+}
+
+/* =====================================================
+   スマホ
+   今までの「390pxスマホアプリ感」を維持
+===================================================== */
+
+@media (max-width: 600px) {
+
+  body {
+    padding: 10px;
+    background: #0f172a;
+  }
+
+  .app-card {
+    max-width: 390px;
+    padding: 18px;
+    border-radius: 28px;
+  }
+
+  .app-header {
+    margin-bottom: 12px;
+  }
+
+  .app-logo {
+    font-size: 1.1rem;
+  }
+
+  .official-badge {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+
+  .tab-container {
+    margin-bottom: 12px;
+  }
+
+  .score-board {
+    padding: 14px 12px;
+    border-radius: 16px;
+  }
+
+  .team-name {
+    font-size: 0.9rem;
+  }
+
+  .score {
+    font-size: 1.8rem;
+  }
+
+  .latest-play-box {
+    padding: 12px;
+  }
+
+  .latest-play-text {
+    font-size: 0.85rem;
+  }
+
+  .basketball-court {
+    height: 240px;
+    max-width: 100%;
+  }
+
+  .court-key {
+    width: 100px;
+    height: 80px;
+  }
+
+  .court-3p {
+    width: 220px;
+    height: 160px;
+  }
+
+  .shot-marker {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+  }
+
+  .shot-label {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+}
+
+/* =====================================================
+   タブレット
+===================================================== */
+
+@media (min-width: 601px) and (max-width: 900px) {
+
+  .app-card {
+    max-width: 850px;
+  }
+
+  .basketball-court {
+    height: 300px;
+  }
+
+  .court-3p {
+    width: 380px;
+    height: 220px;
+  }
+
+  .court-key {
+    width: 150px;
+    height: 110px;
+  }
+}
+
