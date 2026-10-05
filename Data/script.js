@@ -160,3 +160,59 @@
         alert('URLをコピーしました！友達に共有しよう！');
       }
     }
+
+    // 🎯 シュート分布をCSVから描画
+function renderShotMap(games) {
+  const court = document.getElementById('courtContainer');
+  if (!court) return;
+
+  // 既存マーカーをクリア
+  court.querySelectorAll('.shot-marker').forEach(el => el.remove());
+
+  // 座標があるプレー＝シュートのみ抽出
+  const shots = games.filter(g => g['X座標'] && g['X座標'].trim() !== '');
+  const successCodes = ['1', '3', '4']; // 成功系のアクション番号
+
+  let made = 0;
+  const sideStats = {
+    left:  { total: 0, made: 0 },
+    right: { total: 0, made: 0 }
+  };
+
+  shots.forEach(shot => {
+    const isMade = successCodes.includes(shot['アクション1']);
+    const side = shot['サイド'] === 'right' ? 'right' : 'left';
+    if (isMade) made++;
+    sideStats[side].total++;
+    if (isMade) sideStats[side].made++;
+  });
+
+  shots.forEach(shot => {
+    const x = parseFloat(shot['X座標']);
+    const y = parseFloat(shot['Y座標']);
+    if (isNaN(x) || isNaN(y)) return;
+
+    const isMade = successCodes.includes(shot['アクション1']);
+    const side = shot['サイド'] === 'right' ? 'right' : 'left';
+    const s = sideStats[side];
+    const pct = s.total ? Math.round((s.made / s.total) * 1000) / 10 : 0;
+
+    const marker = document.createElement('div');
+    marker.className = `shot-marker ${isMade ? 'success' : 'miss'}`;
+    marker.style.left = `${Math.min(Math.max(x, 2), 98)}%`;
+    marker.style.top = `${Math.min(Math.max(y, 2), 98)}%`;
+    marker.title = `${side === 'right' ? '右サイド' : '左サイド'}：${s.total}本中${s.made}本成功（${pct}%）`;
+
+    court.appendChild(marker);
+  });
+
+  // 統計カードを更新
+  const total = shots.length;
+  const pct = total ? Math.round((made / total) * 1000) / 10 : 0;
+  const totalEl = document.getElementById('statTotal');
+  const madeEl = document.getElementById('statMade');
+  const pctEl = document.getElementById('statPct');
+  if (totalEl) totalEl.textContent = total;
+  if (madeEl) madeEl.textContent = made;
+  if (pctEl) pctEl.textContent = `${pct}%`;
+}

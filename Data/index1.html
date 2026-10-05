@@ -85,7 +85,7 @@
           </div>
         </div>
 
-        <div class="basketball-court">
+        <div class="basketball-court" id="courtContainer">
 
           <div class="court-center-line"></div>
 
@@ -97,22 +97,7 @@
 
           <!-- CSVからここにシュート位置を追加 -->
           <div
-            class="shot-marker success"
-            style="left: 30%; top: 35%;"
-            title="3P成功"
-          ></div>
 
-          <div
-            class="shot-marker success"
-            style="left: 70%; top: 42%;"
-            title="2P成功"
-          ></div>
-
-          <div
-            class="shot-marker miss"
-            style="left: 55%; top: 25%;"
-            title="3P失敗"
-          ></div>
 
         </div>
 
@@ -137,9 +122,7 @@
               シュート数
             </div>
 
-            <div class="shot-stat-value">
-              24
-            </div>
+            <div class="shot-stat-value" id="statTotal">24</div>
           </div>
 
           <div class="shot-stat-card">
