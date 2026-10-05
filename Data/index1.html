@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clutch Pulse - B.LEAGUE公式ファンナビ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-card">
+    
+    <!-- 🔔 通知ポップアップ -->
+    <div id="toastNotification" class="toast-notification">
+      <div class="toast-header">
+        <span>🔔 試合速報</span>
+        <span class="toast-close" onclick="closeToast()">✕</span>
+      </div>
+      <div><strong>🏀 最新プレー更新！</strong></div>
+      <div style="font-size: 0.75rem; color: #cbd5e1; margin-top: 2px;">
+        最新の試合データを読み込みました。
+      </div>
+    </div>
+
+    <!-- ヘッダー -->
+    <div class="app-header">
+      <div class="app-logo">⚡ Clutch Pulse</div>
+      <span class="official-badge">B.LEAGUE ファンナビ</span>
+    </div>
+
+    <!-- タブ切り替え -->
+    <div class="tab-container">
+      <button class="tab-btn active" onclick="switchTab('todayTab', this)">今日の試合</button>
+      <button class="tab-btn" onclick="switchTab('allGamesTab', this)">全試合一覧</button>
+    </div>
+
+    <!-- TAB 1: 今日の試合 -->
+    <div id="todayTab" class="tab-content active">
+      
+      <div class="match-preview-tag">🔥 リアルタイム経過・最新ハイライト</div>
+
+      <!-- 🏀 今日の試合スコアボード（CSVから動的更新） -->
+      <div class="score-board">
+        <div class="team">
+          <div class="team-name" id="homeTeam">チームA</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8; font-weight:bold; margin-bottom:2px;">現在スコア</div>
+          <div class="score win" id="matchScore">0 - 0</div>
+        </div>
+        <div class="team">
+          <div class="team-name" id="awayTeam">チームB</div>
+        </div>
+      </div>
+
+      <!-- 🔥 最新プレー表示領域（CSVの最後の得点/最新アクション） -->
+      <div class="latest-play-box">
+        <div class="latest-play-title">
+          <span>🔥 最新プレー</span>
+          <span id="latestTime" style="margin-left:auto; font-weight:normal; font-size:0.7rem; color:#be123c;"></span>
+        </div>
+        <div class="latest-play-text" id="latestPlayText">データ読み込み中...</div>
+        <div class="latest-play-sub" id="latestPlayer"></div>
+      </div>
+
+      <!-- 🔘 詳細を見る ボタン ＆ 📜 時系列履歴表示エリア -->
+      <button class="btn-toggle-history" onclick="toggleHistory()" id="toggleBtn">
+        🏀 試合の流れ・全イベントを見る ▼
+      </button>
+
+      <div id="historyContainer" class="history-container">
+        <div id="historyList"></div>
+      </div>
+
+      <!-- 🎯 コート表示 -->
+      <div class="section-title">
+        <span>🎯 決定打シュート位置</span>
+      </div>
+      <div class="basketball-court">
+        <div class="court-3p"></div>
+        <div class="court-key"></div>
+        <div class="shot-marker"></div>
+        <div class="shot-label">勝負を決めた3P</div>
+      </div>
+
+      <!-- 🔗 B.LEAGUE 公式誘導ハブ -->
+      <div class="official-action-box">
+        <a href="https://basketball.mb.softbank.jp/" target="_blank" class="btn-hero-official">
+          <div style="font-size: 1.5rem;">🎥</div>
+          <div>
+            <div style="font-size: 0.85rem; opacity: 0.9;">試合の続き・全編視聴は</div>
+            <div style="font-size: 1.2rem; font-weight: 900;">B.LEAGUE 公式で！</div>
+          </div>
+          <div class="hero-arrow">【公式サイトへ】▶</div>
+        </a>
+
+        <div class="btn-grid-sub">
+          <a href="https://www.bleague.jp/" target="_blank" class="btn-sub">📊 ボックススコア</a>
+          <a href="https://www.bleague.jp/goods/" target="_blank" class="btn-sub">👕 公式グッズ</a>
+        </div>
+      </div>
+
+      <!-- SNS ＆ 友達共有 -->
+      <div class="sns-share-container">
+        <button class="bg-share-main" onclick="shareApp()">
+          🏀 友達に試合を共有する
+        </button>
+        <div class="sns-grid">
+          <a href="https://x.com/B_LEAGUE/" target="_blank" class="sns-btn bg-x">公式𝕏</a>
+          <a href="https://page.line.me/881ovskv/" target="_blank" class="sns-btn bg-line">公式LINE</a>
+          <a href="https://www.instagram.com/b.league_official/" target="_blank" class="sns-btn bg-insta">公式Instagram</a>
+          <a href="https://www.youtube.com/@BLEAGUE" target="_blank" class="sns-btn bg-youtube">公式YouTube</a>
+        </div>
+      </div>
+
+      <!-- 次の試合誘導 -->
+      <div class="next-match-card">
+        <div class="next-match-title">💡 あなたへのおすすめ</div>
+        <div class="next-match-box">
+          <div style="font-size: 0.75rem; color: #64748b; font-weight: bold;">NEXT MATCH</div>
+          <div class="next-teams">名古屋 VS 東京</div>
+          <div class="next-date">📅 3月15日 (日) 15:00 TIP OFF</div>
+          <a href="https://bleague-ticket.psrv.jp/" target="_blank" class="btn-next-official">
+            🎟️ 公式サイトでチケットをチェック ▶
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 2: 全試合一覧 -->
+    <div id="allGamesTab" class="tab-content">
+      <div class="section-title"><span>🏀 過去のアーカイブ試合</span></div>
+      <div class="game-list-item">
+        <div><strong>名古屋 82</strong> - 79 相手チーム</div>
+        <span style="font-size:0.7rem; background:#ffe4e6; color:#ef4444; padding:2px 6px; border-radius:4px; font-weight:bold;">本日</span>
+      </div>
+      <div class="game-list-item">
+        <div><strong>名古屋 91</strong> - 88 東京</div>
+        <span style="font-size:0.7rem; color:#64748b;">03/01</span>
+      </div>
+      <div class="game-list-item">
+        <div>千葉 75 - <strong>80 名古屋</strong></div>
+        <span style="font-size:0.7rem; color:#64748b;">02/25</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js">
+  </script>
+
+</body>
+</html>

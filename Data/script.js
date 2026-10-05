@@ -1,109 +1,162 @@
-/**
- * クラッチパルス メインコントロールスクリプト
- */
-let currentIndex = 0;
-let isPlaying = false;
-let playInterval = null;
+   let allGames = [];
+    let isHistoryOpen = false;
 
-// ドム読み込み完了時の処理
-window.addEventListener('DOMContentLoaded', async () => {
-  UIManager.initChart();
+    // ページロード時に実行
+    window.addEventListener('DOMContentLoaded', () => {
+      // 1.5秒後に通知表示
+      setTimeout(() => {
+        const toast = document.getElementById('toastNotification');
+        if (toast) toast.classList.add('show');
+      }, 1500);
 
-  // CSVファイルの読み込み
-  const events = await CSVManager.loadCSV('events.csv');
+      // CSVデータの読み込み開始
+      loadAllData();
+    });
 
-  if (events.length > 0) {
-    // 自動でホーム・アウェイチーム名を取得して設定
-    setupTeams(events);
+    // CSV取得＆パース処理
+    async function loadAllData() {
+      try {
+        const gamesResponse = await fetch('/バスケ/3.1_イベントデータ(座標付き)_バスケ.csv');
+        if (!gamesResponse.ok) {
+          throw new Error('CSVファイルの取得に失敗しました');
+        }
+        const gamesCsv = await gamesResponse.text();
+        
+        // CSVテキストを配列表現に変換
+        allGames = parseCSV(gamesCsv);
+        console.log('取得したイベントデータ:', allGames);
 
-    // 履歴リストの初期生成
-    UIManager.renderHistoryList(events);
+        // 画面の更新（トップには最新1件のみ）
+        renderUI(allGames);
 
-    // 初期表示（最新イベント）
-    currentIndex = events.length - 1;
-    UIManager.updateDisplay(events[currentIndex], events, currentIndex);
-
-    showToast("🏀 試合データを正常にロードしました");
-  } else {
-    showToast("⚠️ CSVデータのロードに失敗しました");
-  }
-
-  // イベントリスナーの登録
-  document.getElementById("btnPlay").addEventListener("click", togglePlayback);
-  document.getElementById("btnReset").addEventListener("click", resetPlayback);
-});
-
-// チーム名の自動抽出
-function setupTeams(events) {
-  const teams = [...new Set(events.map(e => e["チーム名"]).filter(Boolean))];
-  if (teams.length >= 2) {
-    document.getElementById("homeTeam").textContent = teams[0];
-    document.getElementById("awayTeam").textContent = teams[1];
-  } else if (teams.length === 1) {
-    document.getElementById("homeTeam").textContent = teams[0];
-  }
-}
-
-// 時系列再生 / 停止の切り替え
-function togglePlayback() {
-  const btn = document.getElementById("btnPlay");
-  
-  if (isPlaying) {
-    // 停止処理
-    clearInterval(playInterval);
-    isPlaying = false;
-    btn.textContent = "▶ 再生を再開";
-    btn.style.backgroundColor = "#ef4444";
-  } else {
-    // 最後まで行っていたら最初に戻す
-    if (currentIndex >= CSVManager.events.length - 1) {
-      currentIndex = 0;
-    }
-    
-    isPlaying = true;
-    btn.textContent = "⏸ 一時停止";
-    btn.style.backgroundColor = "#475569";
-
-    const speed = parseInt(document.getElementById("playSpeed").value, 10);
-    
-    playInterval = setInterval(() => {
-      if (currentIndex < CSVManager.events.length) {
-        UIManager.updateDisplay(CSVManager.events[currentIndex], CSVManager.events, currentIndex);
-        currentIndex++;
-      } else {
-        clearInterval(playInterval);
-        isPlaying = false;
-        btn.textContent = "▶ 最初から再生";
-        btn.style.backgroundColor = "#ef4444";
+      } catch (error) {
+        console.error('CSVの読み込みエラー:', error);
+        document.getElementById("latestPlayText").textContent = "データの読み込みに失敗しました。";
       }
-    }, speed);
-  }
-}
+    }
 
-// リセット処理
-function resetPlayback() {
-  if (isPlaying) togglePlayback();
-  currentIndex = 0;
-  UIManager.updateDisplay(CSVManager.events[0], CSVManager.events, 0);
-}
+    // カンマ区切りCSVのパース処理
+    function parseCSV(text) {
+      const lines = text.trim().split(/\r?\n/);
+      if (lines.length < 2) return [];
 
-// 履歴の開閉
-function toggleHistory() {
-  const container = document.getElementById("historyContainer");
-  const btn = document.getElementById("toggleBtn");
-  const isOpen = container.classList.toggle("open");
-  
-  btn.textContent = isOpen ? "▲ 隠す" : "📜 全イベント・時系列を見る ▼";
-}
+      const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+      
+      return lines.slice(1).map(line => {
+        // ダブルクォーテーションを考慮した簡易分割
+        const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.trim().replace(/^"|"$/g, ''));
+        const obj = {};
+        headers.forEach((header, i) => {
+          obj[header] = values[i] || '';
+        });
+        return obj;
+      });
+    }
 
-// トースト通知の表示
-function showToast(msg) {
-  const toast = document.getElementById("toastNotification");
-  document.getElementById("toastContent").innerHTML = `<strong>${msg}</strong>`;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 3000);
-}
+    // 画面初期描画（最新データ表示）
+    function renderUI(games) {
+      if (!games || games.length === 0) return;
+      showLatestPlay();
+    }
 
-function closeToast() {
-  document.getElementById("toastNotification").classList.remove("show");
-}
+    // 🔥 トップ画面：最新のプレイ・得点を表示
+    function showLatestPlay() {
+      // スコアが存在する最後のイベントを探す
+      const lastScoreEvent = [...allGames].reverse().find(g => g["スコア"] && g["スコア"].trim() !== "");
+      // 最新の全イベント
+      const latestEvent = allGames[allGames.length - 1];
+
+      // チーム名と対戦名を設定（CSVに両チーム名があれば適宜変更可能）
+      if (latestEvent) {
+        document.getElementById("homeTeam").textContent = latestEvent["チーム名"] || "チームA";
+        document.getElementById("awayTeam").textContent = "チームB";
+      }
+
+      // スコアの更新
+      if (lastScoreEvent) {
+        document.getElementById("matchScore").textContent = lastScoreEvent["スコア"];
+      }
+
+      // 最新プレイテキストの更新
+      if (latestEvent) {
+        document.getElementById("latestPlayText").textContent = latestEvent["プレイテキスト"] || "プレイデータなし";
+        
+        let playerInfo = "";
+        if (latestEvent["背番号1"]) playerInfo += `#${latestEvent["背番号1"]} `;
+        if (latestEvent["チーム名"]) playerInfo += `(${latestEvent["チーム名"]})`;
+        document.getElementById("latestPlayer").textContent = playerInfo;
+
+        if (latestEvent["残り時間"]) {
+          document.getElementById("latestTime").textContent = `残り時間 ${latestEvent["残り時間"]}`;
+        }
+      }
+
+      // 履歴用HTMLも裏で作っておく
+      buildHistoryHTML();
+    }
+
+    // 🔘 「詳細を見る」ボタンの開閉制御
+    function toggleHistory() {
+      const container = document.getElementById("historyContainer");
+      const btn = document.getElementById("toggleBtn");
+      
+      isHistoryOpen = !isHistoryOpen;
+      
+      if (isHistoryOpen) {
+        container.classList.add("open");
+        btn.textContent = "▲ 試合の流れをたたむ";
+      } else {
+        container.classList.remove("open");
+        btn.textContent = "🏀 試合の流れ・全イベントを見る ▼";
+      }
+    }
+
+    // 📜 試合の流れ（全532件等）のHTML生成
+    function buildHistoryHTML() {
+      let html = "";
+
+      allGames.forEach((game, index) => {
+        const hasScore = game["スコア"] && game["スコア"].trim() !== "";
+        
+        html += `
+          <div class="game-list-item">
+            <div class="game-list-item-header">
+              <span>${game["チーム名"] || "イベント"} ${game["背番号1"] ? '#' + game["背番号1"] : ''}</span>
+              ${hasScore ? `<span class="game-score-badge">${game["スコア"]}</span>` : ''}
+            </div>
+            <div>${game["プレイテキスト"] || ''}</div>
+            ${game["残り時間"] ? `<div style="font-size:0.65rem; color:#94a3b8; margin-top:2px;">残り時間: ${game["残り時間"]}</div>` : ''}
+          </div>
+        `;
+      });
+
+      document.getElementById("historyList").innerHTML = html;
+    }
+
+    // タブ切り替え機能
+    function switchTab(tabId, btnElement) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      btnElement.classList.add('active');
+    }
+
+    // 通知を閉じる
+    function closeToast() {
+      const toast = document.getElementById('toastNotification');
+      if (toast) toast.style.display = 'none';
+    }
+
+    // Web Share API
+    function shareApp() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Clutch Pulse | B.LEAGUE速報',
+          text: '最新の試合経過・決定打ハイライトをチェック！',
+          url: window.location.href,
+        });
+      } else {
+        alert('URLをコピーしました！友達に共有しよう！');
+      }
+    }
