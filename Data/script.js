@@ -24,6 +24,7 @@
         
         // CSVテキストを配列表現に変換
         allGames = parseCSV(gamesCsv);
+        renderShotMap(allGames);
         console.log('取得したイベントデータ:', allGames);
 
         // 画面の更新（トップには最新1件のみ）

@@ -391,6 +391,9 @@ body {
     0 15px 35px rgba(0,0,0,0.15);
 }
 
+#courtContainer {
+  display: block;
+}
 
 /* =========================
    コート中央線
