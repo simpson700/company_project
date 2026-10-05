@@ -16,7 +16,7 @@
     // CSV取得＆パース処理
     async function loadAllData() {
       try {
-        const gamesResponse = await fetch('/バスケ/3.1_イベントデータ(座標付き)_バスケ.csv');
+        const gamesResponse = await fetch('events.csv');
         if (!gamesResponse.ok) {
           throw new Error('CSVファイルの取得に失敗しました');
         }
