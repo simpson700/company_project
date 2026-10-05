@@ -125,7 +125,7 @@
               <span>${game["チーム名"] || "イベント"} ${game["背番号1"] ? '#' + game["背番号1"] : ''}</span>
               ${hasScore ? `<span class="game-score-badge">${game["スコア"]}</span>` : ''}
             </div>
-            <div>${game["プレイテキスト"] || ''}</div>
+            <div>${formatPlayText(game)}</div>
             ${game["残り時間"] ? `<div style="font-size:0.65rem; color:#94a3b8; margin-top:2px;">残り時間: ${game["残り時間"]}</div>` : ''}
           </div>
         `;
@@ -216,4 +216,38 @@ function renderShotMap(games) {
   if (totalEl) totalEl.textContent = total;
   if (madeEl) madeEl.textContent = made;
   if (pctEl) pctEl.textContent = `${pct}%`;
+}
+
+// アクション1から得点を判定
+function getShotPoints(actionCode) {
+  if (actionCode === '1') return 3;              // 3P成功
+  if (actionCode === '3' || actionCode === '4') return 2; // 2P成功
+  return 0;
+}
+
+function isShotAction(actionCode) {
+  return ['1', '2', '3', '4', '5', '6'].includes(actionCode);
+}
+
+function isMadeShot(actionCode) {
+  return ['1', '3', '4'].includes(actionCode);
+}
+
+// 「チーム〇の×選手が何点シュート」形式のテキストを作る
+function formatPlayText(game) {
+  const team = game['チーム名'] || '';
+  const player = game['選手名1'] || '';
+  const action = game['アクション1'];
+
+  if (isShotAction(action)) {
+    if (isMadeShot(action)) {
+      const points = getShotPoints(action);
+      return `${team}の${player}が${points}点シュート`;
+    } else {
+      return `${team}の${player}がシュート失敗`;
+    }
+  }
+
+  // シュート以外（アシスト・リバウンドなど）は元のプレイテキストのまま
+  return game['プレイテキスト'] || '';
 }
