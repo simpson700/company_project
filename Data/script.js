@@ -113,26 +113,31 @@
     }
 
     // 📜 試合の流れ（全532件等）のHTML生成
-    function buildHistoryHTML() {
-      let html = "";
+  function buildHistoryHTML() {
+    let html = "";
 
-      allGames.forEach((game, index) => {
-        const hasScore = game["スコア"] && game["スコア"].trim() !== "";
-        
-        html += `
-          <div class="game-list-item">
-            <div class="game-list-item-header">
-              <span>${game["チーム名"] || "イベント"} ${game["背番号1"] ? '#' + game["背番号1"] : ''}</span>
-              ${hasScore ? `<span class="game-score-badge">${game["スコア"]}</span>` : ''}
-            </div>
-            <div>${formatPlayText(game)}</div>
-            ${game["残り時間"] ? `<div style="font-size:0.65rem; color:#94a3b8; margin-top:2px;">残り時間: ${game["残り時間"]}</div>` : ''}
+  // 得点が入ったプレー（3P成功・2P成功）だけに絞り込む
+    const scoringPlays = allGames.filter(game => isMadeShot(game["アクション1"]));
+
+    scoringPlays.forEach((game) => {
+      const points = getShotPoints(game["アクション1"]);
+      const team = game["チーム名"] || "";
+      const player = game["選手名1"] || "";
+
+      html += `
+        <div class="game-list-item">
+          <div class="game-list-item-header">
+            <span>${team} #${game["背番号1"] || ''} ${player}</span>
+            <span class="game-score-badge">${points}点</span>
           </div>
-        `;
-      });
+          <div>${team}の${player}が${points}点シュート</div>
+          ${game["ピリオド残時間"] ? `<div style="font-size:0.65rem; color:#94a3b8; margin-top:2px;">残り時間: ${game["ピリオド残時間"]}</div>` : ''}
+        </div>
+      `;
+    });
 
-      document.getElementById("historyList").innerHTML = html;
-    }
+    document.getElementById("historyList").innerHTML = html;
+  }
 
     // タブ切り替え機能
     function switchTab(tabId, btnElement) {
