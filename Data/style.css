@@ -335,6 +335,77 @@ body {
    シュート分布エリア
 ========================= */
 
+
+/* チーム別シュート統計 */
+.shot-team-stats {
+  margin-top: 18px;
+}
+
+.shot-team-title {
+  margin: 0 0 10px;
+  color: #1e293b;
+  font-size: 0.9rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+}
+
+.shot-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.shot-stat-card {
+  min-width: 0;
+  padding: 16px 8px;
+  text-align: center;
+  background: #f8fafc;
+  border: 1px solid #dbe4ef;
+  border-radius: 12px;
+}
+
+.shot-stat-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-bottom: 6px;
+}
+
+.shot-stat-value {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 900;
+  color: #0f172a;
+  overflow-wrap: anywhere;
+}
+
+.shot-stat-highlight {
+  color: #ef4444;
+}
+
+@media (max-width: 400px) {
+  .shot-stats {
+    gap: 6px;
+  }
+
+  .shot-stat-card {
+    padding: 12px 4px;
+  }
+
+  .shot-stat-label {
+    font-size: 0.68rem;
+  }
+}
+.shot-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
 .shot-distribution-section {
   margin-top: 30px;
 }

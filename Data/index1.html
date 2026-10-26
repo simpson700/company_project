@@ -31,7 +31,7 @@
     <!-- タブ切り替え -->
     <div class="tab-container">
       <button class="tab-btn active" onclick="switchTab('todayTab', this)">今日の試合</button>
-      <button class="tab-btn" onclick="switchTab('allGamesTab', this)">全試合一覧</button>
+      
     </div>
 
     <!-- TAB 1: 今日の試合 -->
@@ -115,37 +115,50 @@
 
         </div>
 
-        <div class="shot-stats">
+        
+<!-- チームAのシュート統計 -->
+<div class="shot-team-stats">
+  <h3 class="shot-team-title">TEAM A</h3>
 
-          <div class="shot-stat-card">
-            <div class="shot-stat-label">
-              シュート数
-            </div>
+  <div class="shot-stats">
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">シュート数</div>
+      <div class="shot-stat-value" id="statATotal">0</div>
+    </div>
 
-            <div class="shot-stat-value" id="statTotal">24</div>
-          </div>
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">成功数</div>
+      <div class="shot-stat-value shot-stat-highlight" id="statAMade">0</div>
+    </div>
 
-          <div class="shot-stat-card">
-            <div class="shot-stat-label">
-              成功数
-            </div>
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">成功率</div>
+      <div class="shot-stat-value" id="statAPct">0%</div>
+    </div>
+  </div>
+</div>
 
-            <div class="shot-stat-value shot-stat-highlight">
-              11
-            </div>
-          </div>
+<!-- チームBのシュート統計 -->
+<div class="shot-team-stats">
+  <h3 class="shot-team-title">TEAM B</h3>
 
-          <div class="shot-stat-card">
-            <div class="shot-stat-label">
-              成功率
-            </div>
+  <div class="shot-stats">
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">シュート数</div>
+      <div class="shot-stat-value" id="statBTotal">0</div>
+    </div>
 
-            <div class="shot-stat-value">
-              45.8%
-            </div>
-          </div>
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">成功数</div>
+      <div class="shot-stat-value shot-stat-highlight" id="statBMade">0</div>
+    </div>
 
-        </div>
+    <div class="shot-stat-card">
+      <div class="shot-stat-label">成功率</div>
+      <div class="shot-stat-value" id="statBPct">0%</div>
+    </div>
+  </div>
+</div>
 
       </section>
 
@@ -162,7 +175,7 @@
 
         <div class="btn-grid-sub">
           <a href="https://www.bleague.jp/" target="_blank" class="btn-sub">📊 ボックススコア</a>
-          <a href="https://www.bleague.jp/goods/" target="_blank" class="btn-sub">👕 公式グッズ</a>
+          <a href="https://www.bleague-shop.jp/" target="_blank" class="btn-sub">👕 公式グッズ</a>
         </div>
       </div>
 

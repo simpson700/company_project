@@ -14,27 +14,38 @@
     });
 
     // CSV取得＆パース処理
-    async function loadAllData() {
-      try {
-        const gamesResponse = await fetch('events.csv');
-        if (!gamesResponse.ok) {
-          throw new Error('CSVファイルの取得に失敗しました');
-        }
-        const gamesCsv = await gamesResponse.text();
-        
-        // CSVテキストを配列表現に変換
-        allGames = parseCSV(gamesCsv);
-        renderShotMap(allGames);
-        console.log('取得したイベントデータ:', allGames);
+    
+async function loadAllData() {
+  try {
+    const gamesResponse = await fetch('events.csv');
 
-        // 画面の更新（トップには最新1件のみ）
-        renderUI(allGames);
-
-      } catch (error) {
-        console.error('CSVの読み込みエラー:', error);
-        document.getElementById("latestPlayText").textContent = "データの読み込みに失敗しました。";
-      }
+    if (!gamesResponse.ok) {
+      throw new Error('CSVファイルの取得に失敗しました');
     }
+
+    const gamesCsv = await gamesResponse.text();
+    allGames = parseCSV(gamesCsv);
+
+    console.log('取得したイベントデータ:', allGames);
+
+    // シュート分布を描画
+    renderShotMap(allGames);
+
+    // チームA・Bのシュート統計を更新
+    renderTeamShotStats(allGames);
+
+    // 最新プレーなどを更新
+    renderUI(allGames);
+
+  } catch (error) {
+    console.error('CSVの読み込みエラー:', error);
+
+    const latestPlayText = document.getElementById('latestPlayText');
+    if (latestPlayText) {
+      latestPlayText.textContent = 'データの読み込みに失敗しました。';
+    }
+  }
+}
 
     // カンマ区切りCSVのパース処理
     function parseCSV(text) {
@@ -168,59 +179,140 @@
     }
 
     // 🎯 シュート分布をCSVから描画
+
 function renderShotMap(games) {
-  const court = document.getElementById('courtContainer');
+  const court = document.getElementById("courtContainer");
   if (!court) return;
 
-  // 既存マーカーをクリア
-  court.querySelectorAll('.shot-marker').forEach(el => el.remove());
+  // 既存のシュートマーカーを削除
+  court.querySelectorAll(".shot-marker").forEach(el => el.remove());
 
-  // 座標があるプレー＝シュートのみ抽出
-  const shots = games.filter(g => g['X座標'] && g['X座標'].trim() !== '');
-  const successCodes = ['1', '3', '4']; // 成功系のアクション番号
+  // シュートのアクションと有効な座標を持つイベントだけ抽出
+  const shots = games.filter(game => {
+    const x = Number(game["X座標"]);
+    const y = Number(game["Y座標"]);
 
-  let made = 0;
-  const sideStats = {
-    left:  { total: 0, made: 0 },
-    right: { total: 0, made: 0 }
-  };
-
-  shots.forEach(shot => {
-    const isMade = successCodes.includes(shot['アクション1']);
-    const side = shot['サイド'] === 'right' ? 'right' : 'left';
-    if (isMade) made++;
-    sideStats[side].total++;
-    if (isMade) sideStats[side].made++;
+    return (
+      isShotAction(game["アクション1"]) &&
+      game["X座標"]?.trim() !== "" &&
+      game["Y座標"]?.trim() !== "" &&
+      Number.isFinite(x) &&
+      Number.isFinite(y)
+    );
   });
 
+  const successCodes = ["1", "3", "4"];
+  let made = 0;
+
   shots.forEach(shot => {
-    const x = parseFloat(shot['X座標']);
-    const y = parseFloat(shot['Y座標']);
-    if (isNaN(x) || isNaN(y)) return;
+    const x = Number(shot["X座標"]);
+    const y = Number(shot["Y座標"]);
+    const side = shot["サイド"]?.trim().toLowerCase();
 
-    const isMade = successCodes.includes(shot['アクション1']);
-    const side = shot['サイド'] === 'right' ? 'right' : 'left';
-    const s = sideStats[side];
-    const pct = s.total ? Math.round((s.made / s.total) * 1000) / 10 : 0;
+    const isMade = successCodes.includes(shot["アクション1"]);
+    if (isMade) made++;
 
-    const marker = document.createElement('div');
-    marker.className = `shot-marker ${isMade ? 'success' : 'miss'}`;
-    marker.style.left = `${Math.min(Math.max(x, 2), 98)}%`;
-    marker.style.top = `${Math.min(Math.max(y, 2), 98)}%`;
-    marker.title = `${side === 'right' ? '右サイド' : '左サイド'}：${s.total}本中${s.made}本成功（${pct}%）`;
+    // CSV上の攻めるゴール側を基準に座標を変換
+    // 左側のゴールはX≈5、右側のゴールはX≈95
+    const basketX = side === "right" ? 95 : 5;
+    const distance = side === "right"
+      ? basketX - x
+      : x - basketX;
+
+    // ハーフコートの奥行きに変換
+    const depth = Math.min(
+      Math.max(distance / 45 * 100, 0),
+      100
+    );
+
+    // 攻めるゴールが右側なら横方向を反転
+    const courtX = side === "right" ? 100 - y : y;
+    const courtY = 100 - depth;
+
+    const marker = document.createElement("div");
+    marker.className = `shot-marker ${isMade ? "success" : "miss"}`;
+
+    // 点にチームA/Bを表示
+    const teamName = shot["チーム名"] || "";
+    const teamLabel = teamName.includes("チームA")
+      ? "A"
+      : teamName.includes("チームB")
+        ? "B"
+        : shot["ホームアウェイ"] === "1"
+          ? "A"
+          : "B";
+
+    marker.textContent = teamLabel;
+    marker.style.left = `${courtX}%`;
+    marker.style.top = `${courtY}%`;
+
+    marker.title =
+      `${teamName} / ${shot["プレイテキスト"] || ""} / ` +
+      `${isMade ? "成功" : "失敗"}`;
 
     court.appendChild(marker);
   });
 
-  // 統計カードを更新
   const total = shots.length;
-  const pct = total ? Math.round((made / total) * 1000) / 10 : 0;
-  const totalEl = document.getElementById('statTotal');
-  const madeEl = document.getElementById('statMade');
-  const pctEl = document.getElementById('statPct');
+  const pct = total
+    ? Math.round((made / total) * 1000) / 10
+    : 0;
+
+  const totalEl = document.getElementById("statTotal");
+  const madeEl = document.getElementById("statMade");
+  const pctEl = document.getElementById("statPct");
+
   if (totalEl) totalEl.textContent = total;
   if (madeEl) madeEl.textContent = made;
   if (pctEl) pctEl.textContent = `${pct}%`;
+}
+
+function renderTeamShotStats(games) {
+  const shots = games.filter(game => {
+    const x = Number(game['X座標']);
+    const y = Number(game['Y座標']);
+
+    return (
+      game['X座標']?.trim() !== '' &&
+      game['Y座標']?.trim() !== '' &&
+      Number.isFinite(x) &&
+      Number.isFinite(y) &&
+      isShotAction(game['アクション1'])
+    );
+  });
+
+  // CSVに登場するチーム名を取得
+  const teams = [...new Set(
+    shots
+      .map(game => game['チーム名']?.trim())
+      .filter(Boolean)
+  )];
+
+  function updateStats(prefix, teamName) {
+    const teamShots = shots.filter(
+      game => game['チーム名']?.trim() === teamName
+    );
+
+    const made = teamShots.filter(
+      game => isMadeShot(game['アクション1'])
+    ).length;
+
+    const total = teamShots.length;
+    const percentage = total
+      ? Math.round((made / total) * 1000) / 10
+      : 0;
+
+    document.getElementById(`stat${prefix}Total`).textContent = total;
+    document.getElementById(`stat${prefix}Made`).textContent = made;
+    document.getElementById(`stat${prefix}Pct`).textContent =
+      `${percentage}%`;
+  }
+
+  // 現時点ではCSVに登場した順でA・Bに割り当てる
+  if (teams[0]) updateStats('A', teams[0]);
+  if (teams[1]) updateStats('B', teams[1]);
+
+  console.log('チームA・B:', teams);
 }
 
 // アクション1から得点を判定
