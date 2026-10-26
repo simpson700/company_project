@@ -158,6 +158,24 @@ async function loadAllData() {
       document.getElementById(tabId).classList.add('active');
       btnElement.classList.add('active');
     }
+    document.querySelectorAll('.shot-filter-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const filter = button.dataset.filter;
+
+    // 選択中のボタンを切り替える
+    document.querySelectorAll('.shot-filter-btn').forEach(btn => {
+      btn.classList.toggle('active', btn === button);
+    });
+
+    // シュートマーカーの表示を切り替える
+    document.querySelectorAll('.shot-marker').forEach(marker => {
+      marker.style.display =
+        filter === 'all' || marker.dataset.result === filter
+          ? ''
+          : 'none';
+    });
+  });
+});
 
     // 通知を閉じる
     function closeToast() {
@@ -177,6 +195,8 @@ async function loadAllData() {
         alert('URLをコピーしました！友達に共有しよう！');
       }
     }
+    
+
 
     // 🎯 シュート分布をCSVから描画
 
@@ -231,7 +251,7 @@ function renderShotMap(games) {
 
     const marker = document.createElement("div");
     marker.className = `shot-marker ${isMade ? "success" : "miss"}`;
-
+    marker.dataset.result = isMade ? "success" : "miss";
     // 点にチームA/Bを表示
     const teamName = shot["チーム名"] || "";
     const teamLabel = teamName.includes("チームA")
@@ -289,24 +309,24 @@ function renderTeamShotStats(games) {
   )];
 
   function updateStats(prefix, teamName) {
-    const teamShots = shots.filter(
-      game => game['チーム名']?.trim() === teamName
-    );
+  const teamShots = shots.filter(
+    shot => shot['チーム名']?.trim() === teamName
+  );
 
-    const made = teamShots.filter(
-      game => isMadeShot(game['アクション1'])
-    ).length;
+  const made = teamShots.filter(
+    shot => isMadeShot(shot['アクション1'])
+  ).length;
 
-    const total = teamShots.length;
-    const percentage = total
-      ? Math.round((made / total) * 1000) / 10
-      : 0;
+  const total = teamShots.length;
+  const percentage = total
+    ? Math.round((made / total) * 1000) / 10
+    : 0;
 
-    document.getElementById(`stat${prefix}Total`).textContent = total;
-    document.getElementById(`stat${prefix}Made`).textContent = made;
-    document.getElementById(`stat${prefix}Pct`).textContent =
-      `${percentage}%`;
-  }
+  document.getElementById(`stat${prefix}Total`).textContent = total;
+  document.getElementById(`stat${prefix}Made`).textContent = made;
+  document.getElementById(`stat${prefix}Pct`).textContent =
+    `${percentage}%`;
+}
 
   // 現時点ではCSVに登場した順でA・Bに割り当てる
   if (teams[0]) updateStats('A', teams[0]);
@@ -328,23 +348,4 @@ function isShotAction(actionCode) {
 
 function isMadeShot(actionCode) {
   return ['1', '3', '4'].includes(actionCode);
-}
-
-// 「チーム〇の×選手が何点シュート」形式のテキストを作る
-function formatPlayText(game) {
-  const team = game['チーム名'] || '';
-  const player = game['選手名1'] || '';
-  const action = game['アクション1'];
-
-  if (isShotAction(action)) {
-    if (isMadeShot(action)) {
-      const points = getShotPoints(action);
-      return `${team}の${player}が${points}点シュート`;
-    } else {
-      return `${team}の${player}がシュート失敗`;
-    }
-  }
-
-  // シュート以外（アシスト・リバウンドなど）は元のプレイテキストのまま
-  return game['プレイテキスト'] || '';
 }

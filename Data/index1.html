@@ -101,64 +101,70 @@
 
         </div>
 
+        
         <div class="shot-legend">
+          <button type="button" class="shot-filter-btn active"
+                  data-filter="all">
+            すべて
+          </button>
 
-          <div class="shot-legend-item">
+          <button type="button" class="shot-filter-btn"
+                  data-filter="success">
             <span class="legend-dot legend-success"></span>
             成功
-          </div>
+          </button>
 
-          <div class="shot-legend-item">
+          <button type="button" class="shot-filter-btn"
+                  data-filter="miss">
             <span class="legend-dot legend-miss"></span>
             失敗
-          </div>
-
+          </button>
         </div>
 
         
-<!-- チームAのシュート統計 -->
-<div class="shot-team-stats">
-  <h3 class="shot-team-title">TEAM A</h3>
+      <!-- チームAのシュート統計 -->
+      <div class="shot-team-stats">
+        <h3 class="shot-team-title">TEAM A</h3>
 
-  <div class="shot-stats">
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">シュート数</div>
-      <div class="shot-stat-value" id="statATotal">0</div>
-    </div>
+        <div class="shot-stats">
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">シュート数</div>
+            <div class="shot-stat-value" id="statATotal">0</div>
+          </div>
 
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">成功数</div>
-      <div class="shot-stat-value shot-stat-highlight" id="statAMade">0</div>
-    </div>
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">成功数</div>
+            <div class="shot-stat-value shot-stat-highlight" id="statAMade">0</div>
+          </div>
 
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">成功率</div>
-      <div class="shot-stat-value" id="statAPct">0%</div>
-    </div>
-  </div>
-</div>
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">成功率</div>
+            <div class="shot-stat-value" id="statAPct">0%</div>
+          </div>
+        </div>
+      </div>
 
-<!-- チームBのシュート統計 -->
-<div class="shot-team-stats">
-  <h3 class="shot-team-title">TEAM B</h3>
+      <!-- チームBのシュート統計 -->
+      <div class="shot-team-stats">
+        <h3 class="shot-team-title">TEAM B</h3>
 
-  <div class="shot-stats">
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">シュート数</div>
-      <div class="shot-stat-value" id="statBTotal">0</div>
-    </div>
+        <div class="shot-stats">
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">シュート数</div>
+            <div class="shot-stat-value" id="statBTotal">0</div>
+          </div>
 
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">成功数</div>
-      <div class="shot-stat-value shot-stat-highlight" id="statBMade">0</div>
-    </div>
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">成功数</div>
+            <div class="shot-stat-value shot-stat-highlight" id="statBMade">0</div>
+          </div>
 
-    <div class="shot-stat-card">
-      <div class="shot-stat-label">成功率</div>
-      <div class="shot-stat-value" id="statBPct">0%</div>
-    </div>
-  </div>
-</div>
+          <div class="shot-stat-card">
+            <div class="shot-stat-label">成功率</div>
+            <div class="shot-stat-value" id="statBPct">0%</div>
+          </div>
+        </div>
+      </div>
 
       </section>
 
